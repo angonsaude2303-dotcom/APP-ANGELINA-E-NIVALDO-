@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1B2B4B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="A&N Smart">
+<title>A&N Smart Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════ */
+:root{
+  --cream:#F5F0E8;--beige:#EDE3D0;
+  --sage:#A8C5A0;--sage-d:#6B9E6B;
+  --navy:#1B2B4B;--navy-l:#2D4270;
+  --lilac:#C5B8D8;--lilac-d:#9B87C0;
+  --white:#FDFCF9;--gold:#C9A96E;--gold-d:#8B6914;
+  --text:#2A2A2A;--muted:#7A7A7A;--border:#DDD5C4;
+  --red:#C0504D;--green:#6B9E6B;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+html{height:100%;font-size:16px;}
+body{
+  font-family:'Jost',sans-serif;background:#0d1520;
+  color:var(--text);height:100dvh;overflow:hidden;
+  max-width:430px;margin:0 auto;position:relative;
+}
+::-webkit-scrollbar{display:none;}
+*{scrollbar-width:none;}
+
+/* ═══════════════════════════════════
+   SCREENS
+═══════════════════════════════════ */
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  background:var(--cream);
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;
+  will-change:transform;
+}
+.screen.off{transform:translateX(100%);opacity:0;pointer-events:none;}
+.screen.off-up{transform:translateY(100%);opacity:0;pointer-events:none;}
+.screen.fade-off{transform:none;opacity:0;pointer-events:none;}
+
+/* ═══════════════════════════════════
+   SPLASH
+═══════════════════════════════════ */
+#s-splash{
+  background:var(--navy);
+  align-items:center;justify-content:center;
+  gap:0;padding:40px 32px calc(40px + var(--safe-bottom));
+}
+.sp-logo{margin-bottom:18px;animation:fadeUp .8s ease both;}
+.sp-name{
+  font-family:'Cormorant Garamond',serif;font-size:32px;
+  font-weight:300;color:var(--cream);font-style:italic;
+  letter-spacing:2px;text-align:center;margin-bottom:5px;
+  animation:fadeUp .8s .1s ease both;
+}
+.sp-sub{
+  font-size:10px;color:rgba(245,240,232,0.35);
+  letter-spacing:3px;text-transform:uppercase;
+  text-align:center;margin-bottom:32px;
+  animation:fadeUp .8s .2s ease both;
+}
+.sp-pillars{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:6px;margin-bottom:40px;
+  animation:fadeUp .8s .3s ease both;
+}
+.sp-pill{
+  padding:4px 11px;border-radius:100px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  font-size:10px;color:rgba(245,240,232,0.45);letter-spacing:.8px;
+}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;animation:fadeUp .8s .4s ease both;}
+.who-btn{
+  border-radius:16px;border:1.5px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.06);
+  padding:20px 14px;cursor:pointer;transition:.2s;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;
+}
+.who-btn:active{transform:scale(.97);}
+.who-ic{font-size:32px;}
+.who-nm{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--cream);letter-spacing:.5px;}
+.who-tg{font-size:10px;color:rgba(245,240,232,0.4);letter-spacing:.5px;}
+.who-a{border-color:rgba(168,197,160,0.4);background:rgba(168,197,160,0.08);}
+.who-n{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.08);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* ═══════════════════════════════════
+   TOP BAR
+═══════════════════════════════════ */
+.topbar{
+  background:var(--navy);flex-shrink:0;
+  padding:calc(var(--safe-top) + 12px) 18px 14px;
+}
+.tb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1px;}
+.tb-left{display:flex;flex-direction:column;}
+.tb-greet{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;color:var(--cream);font-style:italic;
+}
+.tb-date{font-size:10px;color:rgba(245,240,232,0.35);letter-spacing:.3px;margin-top:1px;}
+.tb-right{display:flex;align-items:center;gap:8px;}
+.notif-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;position:relative;
+}
+.notif-badge{
+  position:absolute;top:-2px;right:-2px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--red);color:white;
+  font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  display:none;
+}
+.notif-badge.show{display:flex;}
+.user-av{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--sage),var(--lilac));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:15px;
+  font-weight:600;color:var(--navy);cursor:pointer;
+  border:2px solid rgba(255,255,255,0.15);
+}
+
+/* ═══════════════════════════════════
+   SCROLLABLE CONTENT
+═══════════════════════════════════ */
+.scroll-area{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:calc(72px + var(--safe-bottom));
+}
+
+/* ═══════════════════════════════════
+   CAPTURE BAR (home)
+═══════════════════════════════════ */
+.capture-wrap{
+  background:var(--navy);
+  padding:0 16px 16px;flex-shrink:0;
+}
+.capture-tap{
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:13px 15px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;margin-bottom:10px;transition:.15s;
+}
+.capture-tap:active{background:rgba(255,255,255,0.12);}
+.cap-placeholder{
+  flex:1;font-size:13px;font-style:italic;
+  color:rgba(245,240,232,0.4);
+}
+.cap-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.cap-btn{
+  border-radius:11px;border:none;cursor:pointer;
+  padding:12px 8px;display:flex;flex-direction:column;
+  align-items:center;gap:5px;transition:.15s;
+  font-family:'Jost',sans-serif;
+}
+.cap-btn:active{transform:scale(.95);}
+.cap-ic{font-size:20px;}
+.cap-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.cb-foto{background:rgba(168,197,160,0.18);border:1.5px solid rgba(168,197,160,0.3);color:var(--sage);}
+.cb-voz{background:rgba(197,184,216,0.16);border:1.5px solid rgba(197,184,216,0.25);color:var(--lilac);}
+.cb-manual{background:rgba(201,169,110,0.14);border:1.5px solid rgba(201,169,110,0.22);color:var(--gold);}
+
+/* ═══════════════════════════════════
+   SUMMARY CARDS
+═══════════════════════════════════ */
+.sum-row{
+  display:flex;gap:8px;padding:14px 16px 0;
+  overflow-x:auto;
+}
+.sum-card{
+  flex-shrink:0;min-width:120px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:11px 13px;
+}
+.sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.sum-val{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;line-height:1.1;}
+.sum-sub{font-size:9px;color:var(--muted);margin-top:3px;}
+.sv-red{color:var(--red);}
+.sv-green{color:var(--green);}
+.sv-navy{color:var(--navy);}
+.sv-gold{color:var(--gold-d);}
+
+/* PROGRESS */
+.prog-wrap{padding:10px 16px 0;}
+.prog-bar{background:var(--beige);border-radius:4px;height:5px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sage),var(--sage-d));transition:.6s;}
+.prog-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--muted);}
+
+/* ═══════════════════════════════════
+   ALERTS
+═══════════════════════════════════ */
+.alert-banner{
+  margin:12px 16px 0;border-radius:11px;
+  padding:11px 14px;display:flex;align-items:flex-start;
+  gap:9px;position:relative;
+}
+.ab-venc{background:rgba(192,80,77,0.1);border:1px solid rgba(192,80,77,0.25);}
+.ab-health{background:rgba(197,184,216,0.2);border:1px solid rgba(197,184,216,0.3);}
+.ab-mot{background:var(--navy);border:none;}
+.ab-ic{font-size:16px;flex-shrink:0;margin-top:1px;}
+.ab-t{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.ab-mot .ab-t{color:var(--cream);font-style:italic;font-weight:300;font-size:13px;line-height:1.6;}
+.ab-s{font-size:10px;color:var(--muted);line-height:1.5;}
+.ab-x{
+  position:absolute;top:8px;right:10px;
+  background:none;border:none;cursor:pointer;
+  font-size:13px;color:var(--muted);
+}
+
+/* ═══════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════ */
+.sec-h{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 16px 9px;
+}
+.sec-h-t{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--navy);}
+.sec-h-a{font-size:11px;color:var(--sage-d);cursor:pointer;font-weight:500;}
+
+/* ═══════════════════════════════════
+   COMPANY GRID
+═══════════════════════════════════ */
+.co-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;}
+.co-card{
+  border-radius:13px;padding:13px;cursor:pointer;
+  transition:.15s;border:1.5px solid transparent;
+}
+.co-card:active{transform:scale(.97);}
+.co-soa{background:var(--navy);border-color:rgba(168,197,160,0.2);}
+.co-reset{background:var(--navy);border-color:rgba(201,169,110,0.2);}
+.co-casa{background:rgba(197,184,216,0.13);border-color:rgba(155,135,192,0.2);}
+.co-pessoal{background:rgba(201,169,110,0.09);border-color:rgba(201,169,110,0.2);}
+.co-ic{font-size:18px;margin-bottom:5px;}
+.co-nm{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;margin-bottom:6px;}
+.co-soa .co-nm,.co-reset .co-nm{color:var(--cream);}
+.co-casa .co-nm,.co-pessoal .co-nm{color:var(--navy);}
+.co-total{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--red);}
+.co-pago{font-size:9px;margin-top:2px;opacity:.55;}
+.co-soa .co-pago,.co-reset .co-pago{color:var(--cream);}
+.co-casa .co-pago,.co-pessoal .co-pago{color:var(--navy);}
+
+/* ═══════════════════════════════════
+   TRANSACTION LIST
+═══════════════════════════════════ */
+.tx-list{padding:0 16px;display:flex;flex-direction:column;gap:7px;}
+.tx-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:11px;padding:11px 12px;
+  display:flex;align-items:center;gap:10px;
+  transition:.15s;position:relative;overflow:hidden;
+}
+.tx-card.pago{opacity:.5;}
+.tx-card:active{transform:scale(.99);}
+.tx-cat-ic{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.tx-info{flex:1;min-width:0;}
+.tx-desc{
+  font-size:12px;font-weight:500;color:var(--navy);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tx-badges{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap;}
+.tx-badge{
+  font-size:9px;padding:1px 6px;border-radius:20px;
+  font-weight:600;white-space:nowrap;
+}
+.tb-soa{background:rgba(168,197,160,0.2);color:var(--sage-d);}
+.tb-reset{background:rgba(201,169,110,0.15);color:var(--gold-d);}
+.tb-casa{background:rgba(197,184,216,0.22);color:var(--lilac-d);}
+.tb-pessoal{background:rgba(27,43,75,0.08);color:var(--navy);}
+.tx-cat-lbl{font-size:9px;color:var(--muted);}
+.tx-obs{font-size:9px;color:var(--red);font-weight:600;}
+.tx-right{text-align:right;flex-shrink:0;}
+.tx-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:600;color:var(--red);
+}
+.tx-val.r{color:var(--green);}
+.tx-venc{font-size:9px;color:var(--muted);margin-top:2px;}
+.tx-pago-btn{
+  width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--border);background:none;
+  cursor:pointer;font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;flex-shrink:0;
+}
+.tx-pago-btn.done{
+  background:rgba(107,158,107,0.15);
+  border-color:var(--sage-d);
+}
+
+/* ═══════════════════════════════════
+   BOTTOM NAV
+═══════════════════════════════════ */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 12px calc(8px + var(--safe-bottom));
+  z-index:50;
+}
+.bn{
+  display:flex;flex-direction:column;align-items:center;
+  gap:2px;cursor:pointer;flex:1;transition:.15s;
+  color:var(--muted);
+}
+.bn:active{transform:scale(.92);}
+.bn.on{color:var(--navy);}
+.bn-ic{font-size:19px;}
+.bn-lbl{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.bn.on .bn-ic{transform:scale(1.1);}
+.fab{
+  width:50px;height:50px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--sage-d),var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--cream);cursor:pointer;
+  box-shadow:0 4px 14px rgba(27,43,75,0.28);
+  transition:.18s;flex-shrink:0;
+}
+.fab:active{transform:scale(.94);}
+
+/* ═══════════════════════════════════
+   BOTTOM SHEET
+═══════════════════════════════════ */
+.backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:80;display:none;backdrop-filter:blur(3px);
+}
+.backdrop.on{display:block;}
+.bsheet{
+  position:fixed;bottom:0;left:50%;
+  transform:translateX(-50%) translateY(102%);
+  width:100%;max-width:430px;
+  background:var(--white);border-radius:20px 20px 0 0;
+  z-index:90;transition:transform .32s cubic-bezier(.4,0,.2,1);
+  max-height:92dvh;display:flex;flex-direction:column;
+  padding-bottom:calc(16px + var(--safe-bottom));
+  will-change:transform;
+}
+.bsheet.on{transform:translateX(-50%) translateY(0);}
+.bs-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:10px auto 0;flex-shrink:0;}
+.bs-title{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:600;color:var(--navy);
+  padding:12px 18px;border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.bs-body{padding:14px 18px;overflow-y:auto;flex:1;}
+
+/* ═══════════════════════════════════
+   FORM ELEMENTS
+═══════════════════════════════════ */
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.flbl{font-size:9px;font-weight:600;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;}
+input,select,textarea{
+  background:var(--beige);border:1.5px solid var(--border);
+  color:var(--text);border-radius:10px;
+  padding:11px 13px;font-family:'Jost',sans-serif;
+  font-size:14px;outline:none;transition:.15s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--sage-d);background:var(--cream);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7A7A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+
+/* TYPE TOGGLE */
+.type-tog{display:flex;background:var(--beige);border-radius:10px;padding:3px;margin-bottom:12px;}
+.tt-o{flex:1;padding:9px 8px;border-radius:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:.15s;}
+.tt-o.on{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.09);}
+
+/* OWNER GRID */
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.ow-btn{
+  border:1.5px solid var(--border);background:var(--beige);
+  border-radius:10px;padding:10px 8px;cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:500;color:var(--navy);
+  transition:.15s;
+}
+.ow-btn:active{transform:scale(.97);}
+.ow-btn.on{border-color:var(--sage-d);background:rgba(168,197,160,0.14);}
+.ow-ic{font-size:15px;}
+
+/* CAT GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+.cat-opt{
+  border:1.5px solid var(--border);background:var(--beige);
+  border-radius:9px;padding:8px 4px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:.15s;
+}
+.cat-opt:active{transform:scale(.95);}
+.cat-opt.on{border-color:var(--sage-d);background:rgba(168,197,160,0.14);}
+.cat-opt-ic{font-size:18px;}
+.cat-opt-lbl{font-size:8px;color:var(--muted);text-align:center;line-height:1.2;}
+
+/* BUTTONS */
+.btn{
+  width:100%;padding:13px;border-radius:100px;border:none;
+  cursor:pointer;font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:.3px;
+  transition:.17s;display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+.btn:active{transform:scale(.98);}
+.b-navy{background:var(--navy);color:var(--cream);}
+.b-sage{background:var(--sage-d);color:#fff;}
+.b-out{background:transparent;border:1.5px solid var(--border);color:var(--navy);}
+.b-gold{background:var(--gold);color:#fff;}
+.b-lilac{background:var(--lilac-d);color:#fff;}
+.b-red{background:rgba(192,80,77,.1);color:var(--red);border:1px solid rgba(192,80,77,.25);}
+.b-sm{padding:9px 16px;font-size:12px;width:auto;}
+
+/* ═══════════════════════════════════
+   AI PROCESSOR
+═══════════════════════════════════ */
+.ai-proc{
+  display:none;flex-direction:column;
+  align-items:center;gap:14px;padding:20px 0;
+}
+.ai-proc.on{display:flex;}
+.ai-spin{
+  width:48px;height:48px;
+  border:3px solid rgba(168,197,160,0.2);
+  border-top-color:var(--sage-d);
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ai-t{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--navy);}
+.ai-s{font-size:11px;color:var(--muted);}
+
+/* RESULT CARD */
+.result-card{
+  background:rgba(168,197,160,0.1);
+  border:1.5px solid rgba(107,158,107,0.3);
+  border-radius:12px;padding:13px;
+  margin-bottom:12px;display:none;
+}
+.result-card.on{display:block;}
+.rc-h{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.rc-t{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--navy);}
+.rc-row{
+  display:flex;justify-content:space-between;
+  padding:5px 0;border-bottom:1px solid var(--border);
+  font-size:11px;
+}
+.rc-row:last-child{border:none;}
+.rc-l{color:var(--muted);}
+.rc-v{color:var(--navy);font-weight:500;}
+
+/* ═══════════════════════════════════
+   VOICE RECORDER
+═══════════════════════════════════ */
+.voice-body{
+  display:flex;flex-direction:column;
+  align-items:center;padding:20px 0 8px;gap:14px;
+}
+.voice-hint{
+  font-size:12px;color:var(--muted);text-align:center;
+  line-height:1.7;
+}
+.voice-hint em{color:var(--navy);font-style:italic;}
+.mic-big{
+  width:76px;height:76px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--lilac-d),var(--navy));
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;cursor:pointer;transition:.2s;
+  box-shadow:0 6px 20px rgba(155,135,192,0.35);
+}
+.mic-big:active{transform:scale(.95);}
+.mic-big.rec{
+  background:linear-gradient(135deg,var(--red),#7a1f1f);
+  box-shadow:0 6px 20px rgba(192,80,77,.4);
+  animation:pulseM 1s infinite;
+}
+@keyframes pulseM{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.voice-st{font-size:12px;color:var(--muted);text-align:center;}
+.voice-tx{
+  width:100%;background:var(--beige);border-radius:10px;
+  padding:12px;font-size:13px;color:var(--navy);
+  line-height:1.6;min-height:56px;display:none;
+  border:1px solid var(--border);
+}
+.voice-tx.on{display:block;}
+
+/* ═══════════════════════════════════
+   ARCHIVE SCREEN
+═══════════════════════════════════ */
+.arch-search{
+  width:100%;background:var(--white);
+  border:1.5px solid var(--border);border-radius:11px;
+  padding:11px 14px;font-family:'Jost',sans-serif;
+  font-size:13px;outline:none;color:var(--text);
+  -webkit-appearance:none;
+}
+.arch-search:focus{border-color:var(--sage-d);}
+.filter-row{
+  display:flex;gap:6px;overflow-x:auto;
+  padding-bottom:2px;
+}
+.fc{
+  flex-shrink:0;padding:5px 13px;border-radius:100px;
+  border:1.5px solid var(--border);background:var(--white);
+  font-size:11px;cursor:pointer;color:var(--muted);
+  font-weight:500;transition:.15s;white-space:nowrap;
+}
+.fc.on{background:var(--navy);border-color:var(--navy);color:var(--cream);}
+.doc-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:11px;padding:12px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:.15s;
+}
+.doc-card:active{background:var(--beige);}
+.doc-ic-wrap{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+}
+.di-pix{background:rgba(168,197,160,0.2);}
+.di-nota{background:rgba(27,43,75,0.08);}
+.di-boleto{background:rgba(201,169,110,0.15);}
+.di-manual{background:rgba(197,184,216,0.2);}
+.doc-info{flex:1;min-width:0;}
+.doc-desc{font-size:12px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.doc-val{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--red);flex-shrink:0;}
+
+/* ═══════════════════════════════════
+   LALINHA SCREEN
+═══════════════════════════════════ */
+.lal-msgs{
+  flex:1;overflow-y:auto;padding:12px 14px;
+  display:flex;flex-direction:column;gap:9px;
+  -webkit-overflow-scrolling:touch;
+}
+.lmsg{max-width:86%;font-size:12px;line-height:1.6;}
+.lm-ai{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:3px 12px 12px 12px;
+  padding:9px 12px;color:var(--text);align-self:flex-start;
+}
+.lm-user{
+  background:var(--navy);border-radius:12px 3px 12px 12px;
+  padding:9px 12px;color:var(--cream);align-self:flex-end;
+}
+.lm-time{font-size:9px;color:var(--muted);margin-top:2px;}
+.lal-suggs{
+  display:flex;flex-wrap:wrap;gap:5px;
+  padding:7px 12px;border-top:1px solid var(--border);
+  background:var(--cream);flex-shrink:0;
+}
+.lsugg{
+  padding:4px 11px;border-radius:100px;
+  font-size:10px;background:var(--white);
+  color:var(--navy);cursor:pointer;
+  border:1px solid var(--border);transition:.13s;white-space:nowrap;
+}
+.lsugg:active{background:var(--navy);color:var(--cream);}
+.lal-inp-row{
+  display:flex;gap:7px;padding:9px 12px calc(9px + var(--safe-bottom));
+  background:var(--white);border-top:1px solid var(--border);flex-shrink:0;
+}
+.lal-inp{
+  flex:1;background:var(--beige);border:1.5px solid var(--border);
+  border-radius:100px;padding:9px 14px;
+  font-family:'Jost',sans-serif;font-size:13px;
+  outline:none;transition:.15s;color:var(--text);
+  -webkit-appearance:none;
+}
+.lal-inp:focus{border-color:var(--sage-d);}
+.lal-send{
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:var(--sage-d);color:white;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;transition:.15s;
+}
+.lal-send:active{transform:scale(.9);}
+
+/* ═══════════════════════════════════
+   DIVIDAS SCREEN
+═══════════════════════════════════ */
+.div-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:14px;
+}
+.div-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.div-nm{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--navy);}
+.div-total{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;color:var(--red);}
+.div-bar{background:var(--beige);border-radius:4px;height:6px;overflow:hidden;margin-bottom:6px;}
+.div-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sage),var(--sage-d));transition:.6s;}
+.div-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:9px;}
+.div-pri{
+  display:inline-block;padding:2px 9px;
+  border-radius:100px;font-size:9px;font-weight:700;
+}
+.pri-red{background:rgba(192,80,77,.12);color:var(--red);}
+.pri-yellow{background:rgba(201,169,110,.15);color:var(--gold-d);}
+.pri-green{background:rgba(107,158,107,.15);color:var(--sage-d);}
+
+/* ═══════════════════════════════════
+   ORÇAMENTO SEMÁFORO
+═══════════════════════════════════ */
+.orc-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:11px;padding:13px;
+}
+.orc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.orc-nm{font-size:12px;font-weight:600;color:var(--navy);}
+.orc-badge{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+}
+.bg-green{background:#4CAF50;}
+.bg-yellow{background:#FFC107;}
+.bg-red{background:var(--red);}
+.orc-bar{background:var(--beige);border-radius:3px;height:5px;overflow:hidden;margin-bottom:5px;}
+.orc-fill{height:100%;border-radius:3px;transition:.6s;}
+.fill-green{background:linear-gradient(90deg,#81C784,#4CAF50);}
+.fill-yellow{background:linear-gradient(90deg,#FFD54F,#FFC107);}
+.fill-red{background:linear-gradient(90deg,#E57373,var(--red));}
+.orc-vals{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+
+/* ═══════════════════════════════════
+   INVESTIMENTO CALC
+═══════════════════════════════════ */
+.inv-result-card{
+  background:var(--navy);border-radius:12px;
+  padding:16px;text-align:center;
+}
+.ir-lbl{font-size:9px;color:rgba(245,240,232,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ir-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--cream);margin-bottom:4px;}
+.ir-sub{font-size:10px;color:var(--sage);line-height:1.6;}
+.inv-prog{background:var(--beige);border-radius:4px;height:6px;overflow:hidden;margin-top:10px;}
+.inv-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sage),var(--gold));transition:1s;}
+.milestones{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px;}
+.ms{background:var(--beige);border-radius:8px;padding:8px 4px;text-align:center;}
+.ms-y{font-size:9px;color:var(--muted);}
+.ms-v{font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:600;color:var(--navy);margin-top:1px;}
+
+/* ═══════════════════════════════════
+   CHECKIN BEM-ESTAR
+═══════════════════════════════════ */
+.bw-card{
+  background:linear-gradient(135deg,rgba(197,184,216,.18),rgba(168,197,160,.12));
+  border:1px solid rgba(197,184,216,.3);
+  border-radius:13px;padding:16px;
+}
+.bw-q{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.bw-q:last-of-type{border:none;padding-bottom:0;}
+.bw-ql{font-size:12px;color:var(--navy);}
+.bw-tog{display:flex;gap:6px;}
+.bw-opt{
+  padding:4px 12px;border-radius:100px;border:1.5px solid var(--border);
+  font-size:11px;cursor:pointer;transition:.15s;background:var(--white);color:var(--muted);
+}
+.bw-opt.on-sim{background:rgba(107,158,107,.15);border-color:var(--sage-d);color:var(--sage-d);}
+.bw-opt.on-nao{background:rgba(192,80,77,.1);border-color:var(--red);color:var(--red);}
+.stars{display:flex;gap:4px;}
+.star{font-size:22px;cursor:pointer;opacity:.3;transition:.15s;}
+.star.on{opacity:1;}
+
+/* ═══════════════════════════════════
+   NOTIFICAÇÕES PANEL
+═══════════════════════════════════ */
+.notif-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:11px;padding:12px 14px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.notif-card.unread{border-left:3px solid var(--navy);}
+.notif-ic{font-size:18px;flex-shrink:0;}
+.notif-t{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.notif-s{font-size:11px;color:var(--muted);line-height:1.5;}
+.notif-time{font-size:9px;color:var(--muted);margin-top:4px;}
+
+/* ═══════════════════════════════════
+   TOAST
+═══════════════════════════════════ */
+.toast{
+  position:fixed;bottom:calc(74px + var(--safe-bottom));
+  left:50%;transform:translateX(-50%) translateY(16px);
+  background:var(--navy);color:var(--cream);
+  border-radius:100px;padding:9px 18px;
+  font-size:12px;z-index:200;opacity:0;
+  transition:.3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;border-left:3px solid var(--sage);
+  box-shadow:0 5px 18px rgba(27,43,75,.25);
+  pointer-events:none;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{border-left-color:var(--red);}
+
+/* ═══════════════════════════════════
+   MISC
+═══════════════════════════════════ */
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted);}
+.empty-ic{font-size:36px;margin-bottom:10px;}
+.empty-t{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy);margin-bottom:4px;}
+.two-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.card-base{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:11px;}
+.tip-row{display:flex;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.5;}
+.tip-dot{color:var(--sage-d);flex-shrink:0;}
+.sep{height:1px;background:var(--border);margin:6px 0;}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;}
+.tag-soa{background:rgba(168,197,160,.2);color:var(--sage-d);}
+.tag-reset{background:rgba(201,169,110,.15);color:var(--gold-d);}
+.tag-casa{background:rgba(197,184,216,.22);color:var(--lilac-d);}
+.tag-pessoal{background:rgba(27,43,75,.08);color:var(--navy);}
+</style>
+</head>
+<body>
+
+<!-- ══ SPLASH ══ -->
+<div class="screen" id="s-splash">
+  <div class="sp-logo">
+    <svg width="68" height="68" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="37" fill="rgba(255,255,255,0.06)"/>
+      <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(201,169,110,.5)" stroke-width=".8"/>
+      <path d="M18 36Q12 23 20 14Q30 23 28 35Z" fill="#A8C5A0" opacity=".7"/>
+      <path d="M62 36Q68 23 60 14Q50 23 52 35Z" fill="#A8C5A0" opacity=".7"/>
+      <text x="22" y="52" font-family="Georgia,serif" font-size="21" font-weight="300" fill="#F5F0E8" opacity=".92" font-style="italic">A</text>
+      <text x="36" y="48" font-family="Georgia,serif" font-size="12" fill="#C9A96E" font-style="italic">&amp;</text>
+      <text x="47" y="52" font-family="Georgia,serif" font-size="21" font-weight="300" fill="#F5F0E8" opacity=".92" font-style="italic">N</text>
+      <line x1="20" y1="58" x2="60" y2="58" stroke="#C9A96E" stroke-width=".5" opacity=".4"/>
+    </svg>
+  </div>
+  <div class="sp-name">Angelina &amp; Nivaldo</div>
+  <div class="sp-sub">Smart Finance</div>
+  <div class="sp-pillars">
+    <span class="sp-pill">Família</span>
+    <span class="sp-pill">Diálogo</span>
+    <span class="sp-pill">Reciprocidade</span>
+    <span class="sp-pill">Prioridade</span>
+    <span class="sp-pill">Propósito</span>
+  </div>
+  <div class="who-grid">
+    <button class="who-btn who-a" onclick="login('angelina')">
+      <span class="who-ic">🌿</span>
+      <span class="who-nm">Angelina</span>
+      <span class="who-tg">Soa Spa</span>
+    </button>
+    <button class="who-btn who-n" onclick="login('nivaldo')">
+      <span class="who-ic">⚡</span>
+      <span class="who-nm">Nivaldo</span>
+      <span class="who-tg">Reset Mentoria</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="screen off" id="s-home">
+  <div class="topbar">
+    <div class="tb-row">
+      <div class="tb-left">
+        <div class="tb-greet" id="greetTxt">Olá! 👋</div>
+        <div class="tb-date" id="dateTxt"></div>
+      </div>
+      <div class="tb-right">
+        <div class="notif-btn" onclick="nav('notificacoes')">
+          🔔<div class="notif-badge on" id="notifBadge">3</div>
+        </div>
+        <div class="user-av" id="av1" onclick="goSplash()">A</div>
+      </div>
+    </div>
+  </div>
+  <div class="capture-wrap">
+    <div class="capture-tap" onclick="openSheet('manual')">
+      <span style="font-size:18px;">✏️</span>
+      <span class="cap-placeholder">O que registrar hoje?</span>
+      <span style="font-size:14px;color:rgba(245,240,232,.35);">→</span>
+    </div>
+    <div class="cap-actions">
+      <button class="cap-btn cb-foto" onclick="triggerPhoto()">
+        <span class="cap-ic">📷</span><span class="cap-lbl">Foto</span>
+      </button>
+      <button class="cap-btn cb-voz" onclick="openSheet('voice')">
+        <span class="cap-ic">🎙️</span><span class="cap-lbl">Voz</span>
+      </button>
+      <button class="cap-btn cb-manual" onclick="openSheet('manual')">
+        <span class="cap-ic">✍️</span><span class="cap-lbl">Manual</span>
+      </button>
+    </div>
+  </div>
+  <div class="scroll-area" id="homeContent"></div>
+  <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="processPhoto(event)">
+</div>
+
+<!-- ══ ARQUIVO ══ -->
+<div class="screen off" id="s-arquivo">
+  <div class="topbar">
+    <div class="tb-row">
+      <div class="tb-left"><div class="tb-greet">☁️ Arquivo</div><div class="tb-date">Documentos organizados</div></div>
+      <div class="user-av" id="av2" onclick="goSplash()">A</div>
+    </div>
+  </div>
+  <div class="scroll-area" style="padding:14px 16px 0;">
+    <input class="arch-search" id="archQ" placeholder="🔍 Buscar..." oninput="renderArch()">
+    <div class="filter-row" style="margin-bottom:13px;" id="filterRow">
+      <span class="fc on" onclick="setF(this,'*')">Todos</span>
+      <span class="fc" onclick="setF(this,'pix')">📲 Pix</span>
+      <span class="fc" onclick="setF(this,'nota')">🧾 Nota</span>
+      <span class="fc" onclick="setF(this,'boleto')">📋 Boleto</span>
+      <span class="fc" onclick="setF(this,'soa')">🌿 Soa</span>
+      <span class="fc" onclick="setF(this,'reset')">⚡ Reset</span>
+      <span class="fc" onclick="setF(this,'casa')">🏠 Casa</span>
+      <span class="fc" onclick="setF(this,'pessoal')">👤 Pessoal</span>
+    </div>
+    <div id="archList" style="display:flex;flex-direction:column;gap:7px;padding-bottom:90px;"></div>
+  </div>
+</div>
+
+<!-- ══ LALINHA ══ -->
+<div class="screen off" id="s-lalinha" style="background:var(--cream);">
+  <div class="topbar">
+    <div class="tb-row">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--lilac));display:flex;align-items:center;justify-content:center;font-size:15px;">✨</div>
+        <div><div class="tb-greet">Lalinha</div><div class="tb-date" style="color:var(--sage);">● Online</div></div>
+      </div>
+      <div class="user-av" id="av3" onclick="goSplash()">A</div>
+    </div>
+  </div>
+  <div class="lal-msgs" id="lalMsgs">
+    <div class="lmsg lm-ai">
+      Olá! Sou a <strong>Lalinha</strong> ✨<br><br>
+      Conheço todas as suas contas, dívidas e documentos. Pergunte qualquer coisa sobre suas finanças, bem-estar ou independência financeira!
+      <div class="lm-time">agora</div>
+    </div>
+  </div>
+  <div class="lal-suggs">
+    <span class="lsugg" onclick="askL('Quanto falta pagar este mês?')">💰 A pagar</span>
+    <span class="lsugg" onclick="askL('Resumo da Soa Spa')">🌿 Soa</span>
+    <span class="lsugg" onclick="askL('Resumo da Reset Mentoria')">⚡ Reset</span>
+    <span class="lsugg" onclick="askL('Qual a minha maior dívida?')">⚠️ Dívidas</span>
+    <span class="lsugg" onclick="askL('Angelina está se cuidando?')">🌸 Bem-estar</span>
+    <span class="lsugg" onclick="askL('Como chego à independência financeira em 10 anos?')">📈 10 anos</span>
+    <span class="lsugg" onclick="askL('Dicas para economizar este mês')">💡 Economizar</span>
+  </div>
+  <div class="lal-inp-row">
+    <input class="lal-inp" id="lalInp" placeholder="Pergunte qualquer coisa..." onkeydown="if(event.key==='Enter')sendL()">
+    <button class="lal-send" onclick="sendL()">→</button>
+  </div>
+</div>
+
+<!-- ══ MAIS (hub das outras telas) ══ -->
+<div class="screen off" id="s-mais">
+  <div class="topbar">
+    <div class="tb-row">
+      <div class="tb-left"><div class="tb-greet">Mais Recursos</div></div>
+      <div class="user-av" id="av4" onclick="goSplash()">A</div>
+    </div>
+  </div>
+  <div class="scroll-area" style="padding:14px 16px 0;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:90px;" id="maisGrid"></div>
+  </div>
+</div>
+
+<!-- ══ SUB-SCREENS (dinâmicas) ══ -->
+<div class="screen off" id="s-sub">
+  <div class="topbar" id="subTopbar"></div>
+  <div class="scroll-area" id="subContent" style="padding-bottom:90px;"></div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bnav" id="bnav">
+  <div class="bn on" id="bn0" onclick="nav('home')"><span class="bn-ic">🏠</span><span class="bn-lbl">Início</span></div>
+  <div class="bn" id="bn1" onclick="nav('arquivo')"><span class="bn-ic">☁️</span><span class="bn-lbl">Arquivo</span></div>
+  <button class="fab" onclick="openSheet('capture')">+</button>
+  <div class="bn" id="bn2" onclick="nav('lalinha')"><span class="bn-ic">✨</span><span class="bn-lbl">Lalinha</span></div>
+  <div class="bn" id="bn3" onclick="nav('mais')"><span class="bn-ic">⚡</span><span class="bn-lbl">Mais</span></div>
+</nav>
+
+<!-- ══ SHEETS ══ -->
+<div class="backdrop" id="bd" onclick="closeSheets()"></div>
+
+<!-- CAPTURE MENU -->
+<div class="bsheet" id="bs-capture">
+  <div class="bs-handle"></div>
+  <div class="bs-title">📎 O que você quer registrar?</div>
+  <div class="bs-body" style="display:flex;flex-direction:column;gap:10px;">
+    <button class="btn b-sage" onclick="closeSheets();triggerPhoto()">📷 Tirar foto da nota/boleto/pix</button>
+    <button class="btn b-lilac" onclick="closeSheets();openSheet('voice')">🎙️ Falar por voz</button>
+    <button class="btn b-navy" onclick="closeSheets();openSheet('manual')">✍️ Digitar manualmente</button>
+    <button class="btn b-out" onclick="closeSheets()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MANUAL FORM -->
+<div class="bsheet" id="bs-manual">
+  <div class="bs-handle"></div>
+  <div class="bs-title" id="manualTitle">➕ Novo Lançamento</div>
+  <div class="bs-body">
+    <div class="ai-proc" id="aiProc">
+      <div class="ai-spin"></div>
+      <div class="ai-t">Lalinha processando...</div>
+      <div class="ai-s" id="aiStep">Analisando documento</div>
+    </div>
+    <div class="result-card" id="resultCard">
+      <div class="rc-h"><span style="font-size:18px;">✅</span><span class="rc-t">Lalinha encontrou:</span></div>
+      <div class="rc-row"><span class="rc-l">Descrição</span><span class="rc-v" id="rc-desc">—</span></div>
+      <div class="rc-row"><span class="rc-l">Valor</span><span class="rc-v" id="rc-val">—</span></div>
+      <div class="rc-row"><span class="rc-l">Categoria</span><span class="rc-v" id="rc-cat">—</span></div>
+      <div class="rc-row"><span class="rc-l">Conta</span><span class="rc-v" id="rc-own">—</span></div>
+      <p style="font-size:10px;color:var(--muted);margin-top:7px;">Confirme ou ajuste abaixo ↓</p>
+    </div>
+    <div id="manualForm">
+      <div class="type-tog">
+        <div class="tt-o on" onclick="selTipo('despesa',this)">💸 Despesa</div>
+        <div class="tt-o" onclick="selTipo('receita',this)">💰 Receita</div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Descrição</label>
+        <input type="text" id="m-desc" placeholder="Ex: Energia da casa, Pix fornecedor...">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+        <div class="fgrp"><label class="flbl">Valor (R$)</label><input type="number" id="m-val" inputmode="decimal" placeholder="0,00" step="0.01"></div>
+        <div class="fgrp"><label class="flbl">Data / Venc.</label><input type="date" id="m-data"></div>
+      </div>
+      <label class="flbl" style="display:block;margin-bottom:6px;">Conta</label>
+      <div class="owner-grid" id="ownerGrid">
+        <div class="ow-btn on" data-o="casa" onclick="selOwner(this)"><span class="ow-ic">🏠</span>Casa</div>
+        <div class="ow-btn" data-o="pessoal" onclick="selOwner(this)"><span class="ow-ic">👤</span>Pessoal</div>
+        <div class="ow-btn" data-o="soa" onclick="selOwner(this)"><span class="ow-ic">🌿</span>Soa Spa</div>
+        <div class="ow-btn" data-o="reset" onclick="selOwner(this)"><span class="ow-ic">⚡</span>Reset</div>
+      </div>
+      <label class="flbl" style="display:block;margin-bottom:6px;">Categoria</label>
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-opt on" data-c="aluguel" onclick="selCat(this)"><span class="cat-opt-ic">🏢</span><span class="cat-opt-lbl">Aluguel</span></div>
+        <div class="cat-opt" data-c="energia" onclick="selCat(this)"><span class="cat-opt-ic">💡</span><span class="cat-opt-lbl">Energia</span></div>
+        <div class="cat-opt" data-c="mercado" onclick="selCat(this)"><span class="cat-opt-ic">🛒</span><span class="cat-opt-lbl">Mercado</span></div>
+        <div class="cat-opt" data-c="carro" onclick="selCat(this)"><span class="cat-opt-ic">🚗</span><span class="cat-opt-lbl">Carro</span></div>
+        <div class="cat-opt" data-c="alimentacao" onclick="selCat(this)"><span class="cat-opt-ic">🍽️</span><span class="cat-opt-lbl">Aliment.</span></div>
+        <div class="cat-opt" data-c="assinatura" onclick="selCat(this)"><span class="cat-opt-ic">📦</span><span class="cat-opt-lbl">Assinatura</span></div>
+        <div class="cat-opt" data-c="marketing" onclick="selCat(this)"><span class="cat-opt-ic">📱</span><span class="cat-opt-lbl">Marketing</span></div>
+        <div class="cat-opt" data-c="contador" onclick="selCat(this)"><span class="cat-opt-ic">📊</span><span class="cat-opt-lbl">Contador</span></div>
+        <div class="cat-opt" data-c="saude" onclick="selCat(this)"><span class="cat-opt-ic">🏥</span><span class="cat-opt-lbl">Saúde</span></div>
+        <div class="cat-opt" data-c="lazer" onclick="selCat(this)"><span class="cat-opt-ic">🎬</span><span class="cat-opt-lbl">Lazer</span></div>
+        <div class="cat-opt" data-c="combustivel" onclick="selCat(this)"><span class="cat-opt-ic">⛽</span><span class="cat-opt-lbl">Combust.</span></div>
+        <div class="cat-opt" data-c="investimento" onclick="selCat(this)"><span class="cat-opt-ic">📈</span><span class="cat-opt-lbl">Investim.</span></div>
+        <div class="cat-opt" data-c="outros" onclick="selCat(this)"><span class="cat-opt-ic">🔖</span><span class="cat-opt-lbl">Outros</span></div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Tipo de Documento</label>
+        <select id="m-doctype">
+          <option value="manual">✍️ Lançamento manual</option>
+          <option value="pix">📲 Comprovante Pix</option>
+          <option value="nota">🧾 Nota Fiscal</option>
+          <option value="boleto">📋 Boleto</option>
+        </select>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Observação (opcional)</label>
+        <input type="text" id="m-obs" placeholder="Parcela, detalhe...">
+      </div>
+      <button class="btn b-navy" style="margin-top:4px;" onclick="salvar()">💾 Salvar e Arquivar</button>
+      <button class="btn b-out" style="margin-top:8px;" onclick="closeSheets()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- VOICE -->
+<div class="bsheet" id="bs-voice">
+  <div class="bs-handle"></div>
+  <div class="bs-title">🎙️ Ditar por Voz</div>
+  <div class="bs-body">
+    <div class="voice-body">
+      <div class="voice-hint">
+        Diga algo como:<br>
+        <em>"Paguei 350 no Instagram da Soa hoje"</em><br>
+        <em>"Energia da casa 400 reais vencendo dia 23"</em>
+      </div>
+      <button class="mic-big" id="micBtn" onclick="toggleVoz()">🎙️</button>
+      <div class="voice-st" id="vozSt">Toque para gravar</div>
+      <div class="voice-tx" id="vozTx"></div>
+      <button class="btn b-lilac" id="vozProc" style="display:none;" onclick="processarVoz()">✨ Processar com Lalinha →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════
+const CATS={
+  aluguel:{l:'Aluguel',i:'🏢'},energia:{l:'Energia/Água',i:'💡'},
+  mercado:{l:'Mercado',i:'🛒'},carro:{l:'Carro',i:'🚗'},
+  alimentacao:{l:'Alimentação',i:'🍽️'},assinatura:{l:'Assinatura',i:'📦'},
+  marketing:{l:'Marketing',i:'📱'},contador:{l:'Contador',i:'📊'},
+  saude:{l:'Saúde',i:'🏥'},lazer:{l:'Lazer',i:'🎬'},
+  combustivel:{l:'Combustível',i:'⛽'},investimento:{l:'Investimento',i:'📈'},
+  outros:{l:'Outros',i:'🔖'}
+};
+const OWNERS={
+  casa:{l:'Casa',ic:'🏠',cls:'tb-casa',tag:'tag-casa'},
+  pessoal:{l:'Pessoal',ic:'👤',cls:'tb-pessoal',tag:'tag-pessoal'},
+  soa:{l:'Soa Spa',ic:'🌿',cls:'tb-soa',tag:'tag-soa'},
+  reset:{l:'Reset',ic:'⚡',cls:'tb-reset',tag:'tag-reset'}
+};
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MOTS=[
+  'Dinheiro guardado hoje é liberdade comprada amanhã.',
+  'Em 10 anos você pode ser livre. Começa com o que faz hoje.',
+  'Família próspera começa com finanças organizadas.',
+  'Propósito sem planejamento financeiro é apenas um sonho.',
+  'Cada real investido hoje planta a semente de dez amanhã.',
+];
+const GREET_A=['Olá, Angelina! 🌿','Bem-vinda, Angelina! ✨','Boa sorte hoje, Angelina! 💚'];
+const GREET_N=['Olá, Nivaldo! ⚡','E aí, Nivaldo! 🔥','Bora, Nivaldo! 💪'];
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let curUser=localStorage.getItem('an_u')||null;
+let curScreen='splash';
+let curFilter='*';
+let selOwnerVal='casa';
+let selTipoVal='despesa';
+let selCatVal='aluguel';
+let vozText='';
+let vozRec=null;
+let vozIsRec=false;
+let pagoSet=new Set(JSON.parse(localStorage.getItem('an_pago')||'[]'));
+
+// ORÇAMENTOS
+const ORC_META={
+  'soa-aluguel':2400,'soa-marketing':2000,'soa-contador':450,
+  'reset-marketing':1500,'reset-assinatura':560,
+  'casa-aluguel':2800,'casa-mercado':1500,'casa-energia':800,
+  'pessoal-saude':1200
+};
+
+// DÍVIDAS
+let dividas=JSON.parse(localStorage.getItem('an_div')||'null');
+if(!dividas){
+  dividas=[
+    {id:1,desc:'Cleber Agiota',total:5000,pago:0,prioridade:'alta',obs:'⚠️ PRIORIDADE MÁXIMA'},
+    {id:2,desc:'Isabela',total:3000,pago:0,prioridade:'alta',obs:''},
+    {id:3,desc:'Cunhada Cida',total:1700,pago:0,prioridade:'media',obs:'Devolução investimento'},
+    {id:4,desc:'Patotinha Maria Clara',total:850,pago:0,prioridade:'media',obs:''},
+    {id:5,desc:'Érica / André Imperador',total:750,pago:0,prioridade:'baixa',obs:''},
+    {id:6,desc:'Vinícius — Papa',total:750,pago:0,prioridade:'baixa',obs:''},
+  ];
+  localStorage.setItem('an_div',JSON.stringify(dividas));
+}
+
+// CHECKIN BEM-ESTAR
+let bwData=JSON.parse(localStorage.getItem('an_bw')||'{}');
+let bwAnswers={q1:null,q2:null,q3:null,stars:0};
+
+// TRANSACTIONS
+let txs=JSON.parse(localStorage.getItem('an_txs')||'null');
+if(!txs){
+  const d='2026-03-23';
+  txs=[
+    {id:101,desc:'Água — Casa',valor:400,data:d,venc:d,owner:'casa',cat:'energia',tipo:'despesa',docType:'manual',obs:''},
+    {id:102,desc:'Aluguel Votuporanga',valor:2800,data:d,venc:d,owner:'casa',cat:'aluguel',tipo:'despesa',docType:'manual',obs:''},
+    {id:103,desc:'Carro — Casa',valor:1800,data:d,venc:d,owner:'casa',cat:'carro',tipo:'despesa',docType:'manual',obs:''},
+    {id:104,desc:'Energia — Casa',valor:400,data:d,venc:d,owner:'casa',cat:'energia',tipo:'despesa',docType:'manual',obs:''},
+    {id:105,desc:'Internet — Casa',valor:130,data:d,venc:d,owner:'casa',cat:'assinatura',tipo:'despesa',docType:'manual',obs:''},
+    {id:106,desc:'Mercado — Casa',valor:1500,data:d,venc:d,owner:'casa',cat:'mercado',tipo:'despesa',docType:'manual',obs:''},
+    {id:201,desc:'Academia — Angelina & Nivaldo',valor:1160,data:d,venc:d,owner:'pessoal',cat:'saude',tipo:'despesa',docType:'manual',obs:''},
+    {id:202,desc:'Acerto Isabela',valor:3000,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:203,desc:'Celular — Nivaldo',valor:254,data:d,venc:d,owner:'pessoal',cat:'assinatura',tipo:'despesa',docType:'manual',obs:'6262-9490'},
+    {id:204,desc:'Celular — Angelina',valor:60,data:d,venc:d,owner:'pessoal',cat:'assinatura',tipo:'despesa',docType:'manual',obs:''},
+    {id:205,desc:'Cleber Agiota — Dívida',valor:5000,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:'⚠️ Prioridade'},
+    {id:206,desc:'Cunhada Cida — Devolução',valor:1700,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:207,desc:'Érica / André',valor:750,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:208,desc:'Patotinha Maria Clara',valor:850,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:209,desc:'Vinícius — Papa',valor:750,data:d,venc:d,owner:'pessoal',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:301,desc:'Fragasoft — Reset',valor:560,data:d,venc:d,owner:'reset',cat:'assinatura',tipo:'despesa',docType:'manual',obs:''},
+    {id:302,desc:'Gestão Witalo',valor:2500,data:d,venc:d,owner:'reset',cat:'outros',tipo:'despesa',docType:'manual',obs:''},
+    {id:303,desc:'Instagram Ads — Reset',valor:1500,data:d,venc:d,owner:'reset',cat:'marketing',tipo:'despesa',docType:'manual',obs:''},
+    {id:401,desc:'Aluguel — Soa Spa',valor:2400,data:d,venc:d,owner:'soa',cat:'aluguel',tipo:'despesa',docType:'manual',obs:''},
+    {id:402,desc:'Contador Juliano',valor:450,data:d,venc:d,owner:'soa',cat:'contador',tipo:'despesa',docType:'manual',obs:''},
+    {id:403,desc:'Celular — Soa Spa',valor:85,data:d,venc:d,owner:'soa',cat:'assinatura',tipo:'despesa',docType:'manual',obs:''},
+    {id:404,desc:'Instagram Ads — Soa',valor:1500,data:d,venc:d,owner:'soa',cat:'marketing',tipo:'despesa',docType:'manual',obs:''},
+    {id:405,desc:'Tráfego Pago — Soa',valor:780,data:d,venc:d,owner:'soa',cat:'marketing',tipo:'despesa',docType:'manual',obs:''},
+  ];
+  localStorage.setItem('an_txs',JSON.stringify(txs));
+}
+let docs=JSON.parse(localStorage.getItem('an_docs')||'[]');
+function saveTxs(){localStorage.setItem('an_txs',JSON.stringify(txs));}
+function saveDocs(){localStorage.setItem('an_docs',JSON.stringify(docs));}
+function savePago(){localStorage.setItem('an_pago',JSON.stringify([...pagoSet]));}
+function saveDividas(){localStorage.setItem('an_div',JSON.stringify(dividas));}
+
+function getMes(){
+  return txs.filter(t=>{
+    const m=new Date().getMonth(),y=new Date().getFullYear();
+    const td=new Date(t.data);
+    return td.getMonth()===m&&td.getFullYear()===y;
+  });
+}
+
+// ════════════════════════════════════════
+// LOGIN / NAVIGATION
+// ════════════════════════════════════════
+function login(u){
+  curUser=u;localStorage.setItem('an_u',u);
+  const init=u==='angelina'?'A':'N';
+  ['av1','av2','av3','av4'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+  document.getElementById('bnav').style.display='flex';
+  nav('home');
+}
+function goSplash(){
+  document.querySelectorAll('.screen').forEach(s=>s.className='screen off');
+  document.getElementById('s-splash').className='screen';
+  document.getElementById('bnav').style.display='none';
+}
+
+let scrMap={home:'s-home',arquivo:'s-arquivo',lalinha:'s-lalinha',mais:'s-mais'};
+let bnMap={home:'bn0',arquivo:'bn1',lalinha:'bn2',mais:'bn3'};
+
+function nav(id){
+  if(scrMap[id]){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.add('off'));
+    document.getElementById(scrMap[id]).classList.remove('off');
+    document.querySelectorAll('.bn').forEach(b=>b.classList.remove('on'));
+    if(bnMap[id])document.getElementById(bnMap[id]).classList.add('on');
+    if(id==='home')renderHome();
+    if(id==='arquivo')renderArch();
+    if(id==='mais')renderMais();
+    if(id==='lalinha'){const m=document.getElementById('lalMsgs');if(m)m.scrollTop=m.scrollHeight;}
+  }else{
+    // Sub-screen
+    showSub(id);
+  }
+}
+
+function showSub(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('off'));
+  const sub=document.getElementById('s-sub');
+  sub.classList.remove('off');
+  const tb=document.getElementById('subTopbar');
+  const ct=document.getElementById('subContent');
+  const backs={
+    contas:'home',dividas:'mais',orcamento:'mais',
+    investimento:'mais',bemestar:'mais',notificacoes:'home'
+  };
+  const back=backs[id]||'mais';
+  const titles={
+    contas:'📋 Contas do Mês',dividas:'💰 Dívidas',
+    orcamento:'🚦 Orçamento',investimento:'📈 Independência',
+    bemestar:'🌸 Bem-estar',notificacoes:'🔔 Notificações'
+  };
+  tb.innerHTML=`<div class="tb-row">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button onclick="nav('${back}')" style="background:rgba(255,255,255,.1);border:none;color:var(--cream);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px;">‹</button>
+      <div class="tb-greet">${titles[id]||id}</div>
+    </div>
+    <div class="user-av" onclick="goSplash()">A</div>
+  </div>`;
+  if(id==='contas')renderContas(ct);
+  else if(id==='dividas')renderDividas(ct);
+  else if(id==='orcamento')renderOrcamento(ct);
+  else if(id==='investimento')renderInvestimento(ct);
+  else if(id==='bemestar')renderBemestar(ct);
+  else if(id==='notificacoes')renderNotificacoes(ct);
+}
+
+// ════════════════════════════════════════
+// HOME
+// ════════════════════════════════════════
+function renderHome(){
+  const all=getMes();
+  const desp=all.filter(t=>t.tipo==='despesa');
+  const tot=desp.reduce((s,t)=>s+t.valor,0);
+  const pago=desp.filter(t=>pagoSet.has(t.id)).reduce((s,t)=>s+t.valor,0);
+  const apagar=tot-pago;
+  const pct=tot?Math.round(pago/tot*100):0;
+  const owD={};['soa','reset','casa','pessoal'].forEach(o=>{owD[o]=desp.filter(t=>t.owner===o).reduce((s,t)=>s+t.valor,0);});
+  const owP={};['soa','reset','casa','pessoal'].forEach(o=>{owP[o]=desp.filter(t=>t.owner===o&&pagoSet.has(t.id)).reduce((s,t)=>s+t.valor,0);});
+  const gr=curUser==='angelina'?GREET_A:GREET_N;
+  document.getElementById('greetTxt').textContent=gr[Math.floor(Math.random()*gr.length)];
+  const now=new Date();
+  document.getElementById('dateTxt').textContent=`${now.getDate()} de ${MONTHS[now.getMonth()]}`;
+  const mot=MOTS[Math.floor(Math.random()*MOTS.length)];
+
+  document.getElementById('homeContent').innerHTML=`
+    <div class="sum-row">
+      <div class="sum-card"><div class="sum-lbl">Total Contas</div><div class="sum-val sv-red">R$ ${fmtK(tot)}</div><div class="sum-sub">${desp.length} contas · venc.23</div></div>
+      <div class="sum-card"><div class="sum-lbl">Pago</div><div class="sum-val sv-green">R$ ${fmtK(pago)}</div><div class="sum-sub">${[...pagoSet].filter(id=>desp.find(t=>t.id===id)).length} quitadas</div></div>
+      <div class="sum-card"><div class="sum-lbl">A Pagar</div><div class="sum-val sv-navy" style="color:${apagar>0?'var(--red)':'var(--green)'}">R$ ${fmtK(apagar)}</div><div class="sum-sub">${apagar>0?'⚠️ Pendente':'✅ Tudo pago'}</div></div>
+      <div class="sum-card"><div class="sum-lbl">Cloud</div><div class="sum-val sv-gold">${docs.length}</div><div class="sum-sub">docs arquivados</div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="prog-labels"><span>${pct}% pago</span><span>venc. 23/${String(now.getMonth()+1).padStart(2,'0')}</span></div>
+    </div>
+    ${curUser==='angelina'?`<div class="alert-banner ab-health" id="haEl"><div class="ab-ic">🌸</div><div><div class="ab-t">Angelina, cuide de você!</div><div class="ab-s">Você cuida de todos. E quem cuida de você? Reserve algo só para você este mês.</div></div><button class="ab-x" onclick="document.getElementById('haEl').style.display='none'">✕</button></div>`:''}
+    <div class="alert-banner ab-mot"><div class="ab-t">"${mot}"</div></div>
+    <div class="sec-h"><span class="sec-h-t">Por Conta</span><span class="sec-h-a" onclick="nav('contas')">Ver todas →</span></div>
+    <div class="co-grid">
+      ${[['soa','🌿','Soa Spa','co-soa'],['reset','⚡','Reset','co-reset'],['casa','🏠','Casa','co-casa'],['pessoal','👤','Pessoal','co-pessoal']].map(([o,ic,nm,cls])=>`
+        <div class="co-card ${cls}" onclick="nav('contas')">
+          <div class="co-ic">${ic}</div>
+          <div class="co-nm">${nm}</div>
+          <div class="co-total">R$ ${fmtK(owD[o]||0)}</div>
+          <div class="co-pago">Pago: R$ ${fmtK(owP[o]||0)}</div>
+        </div>`).join('')}
+    </div>
+    <div class="sec-h" style="margin-top:4px;">
+      <span class="sec-h-t">Contas do Mês</span>
+      <span class="sec-h-a" onclick="marcarTudo()">✅ Marcar tudo</span>
+    </div>
+    <div class="tx-list">
+      ${desp.slice().reverse().map(t=>txCard(t)).join('')}
+    </div>
+  `;
+}
+
+function txCard(t){
+  const cat=CATS[t.cat]||{l:t.cat,i:'🔖'};
+  const own=OWNERS[t.owner]||{l:t.owner,ic:'',cls:'',tag:''};
+  const ip=pagoSet.has(t.id);
+  const bg={soa:'rgba(168,197,160,.2)',reset:'rgba(201,169,110,.15)',casa:'rgba(197,184,216,.2)',pessoal:'rgba(27,43,75,.08)'}[t.owner]||'var(--beige)';
+  return`<div class="tx-card ${ip?'pago':''}">
+    <div class="tx-cat-ic" style="background:${bg}">${cat.i}</div>
+    <div class="tx-info">
+      <div class="tx-desc">${t.desc}</div>
+      <div class="tx-badges">
+        <span class="tx-badge ${own.cls}">${own.ic} ${own.l}</span>
+        <span class="tx-cat">${cat.l}</span>
+        ${t.obs?`<span class="tx-obs">${t.obs}</span>`:''}
+      </div>
+    </div>
+    <div class="tx-right">
+      <div class="tx-val ${t.tipo==='receita'?'r':''}">${t.tipo==='receita'?'+':''}R$ ${fmt(t.valor)}</div>
+      <div class="tx-venc">${fmtD(t.venc||t.data)}</div>
+    </div>
+    <button class="tx-pago-btn ${ip?'done':''}" onclick="togglePago(${t.id},event)">${ip?'✅':'○'}</button>
+  </div>`;
+}
+
+function togglePago(id,e){
+  e.stopPropagation();
+  if(pagoSet.has(id))pagoSet.delete(id);else pagoSet.add(id);
+  savePago();renderHome();
+  showToast(pagoSet.has(id)?'✅ Marcado como pago!':'↩️ Desmarcado');
+}
+function marcarTudo(){
+  getMes().filter(t=>t.tipo==='despesa').forEach(t=>pagoSet.add(t.id));
+  savePago();renderHome();showToast('✅ Tudo marcado como pago!');
+}
+
+// ════════════════════════════════════════
+// MAIS HUB
+// ════════════════════════════════════════
+function renderMais(){
+  const items=[
+    {ic:'📋',nm:'Contas do Mês',sub:'Ver e gerenciar todas',id:'contas',col:'rgba(27,43,75,.08)'},
+    {ic:'💰',nm:'Dívidas',sub:'Controle e quitação',id:'dividas',col:'rgba(192,80,77,.08)'},
+    {ic:'🚦',nm:'Orçamento',sub:'Semáforo por categoria',id:'orcamento',col:'rgba(255,193,7,.08)'},
+    {ic:'📈',nm:'Independência',sub:'Calculadora 10 anos',id:'investimento',col:'rgba(107,158,107,.1)'},
+    {ic:'🌸',nm:'Bem-estar',sub:'Check-in Angelina',id:'bemestar',col:'rgba(197,184,216,.2)'},
+    {ic:'🔔',nm:'Notificações',sub:'Alertas e lembretes',id:'notificacoes',col:'rgba(201,169,110,.1)'},
+    {ic:'📄',nm:'Exportar PDF',sub:'Relatório do mês',id:'_pdf',col:'rgba(27,43,75,.06)'},
+    {ic:'🔗',nm:'Link Reset',sub:'Isca de captação',id:'_link',col:'rgba(201,169,110,.12)'},
+  ];
+  document.getElementById('maisGrid').innerHTML=items.map(it=>`
+    <div onclick="${it.id.startsWith('_')?it.id==='_pdf'?'gerarPDF()':it.id==='_link'?'copiarLink()':'':'nav(\''+it.id+'\')'}"
+      style="background:var(--white);border:1px solid var(--border);border-radius:13px;padding:16px;cursor:pointer;transition:.15s;"
+      onmouseover="this.style.borderColor='var(--sage-d)'" onmouseout="this.style.borderColor='var(--border)'"
+      ontouchstart="this.style.opacity='.8'" ontouchend="this.style.opacity='1'">
+      <div style="font-size:26px;margin-bottom:7px;">${it.ic}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:2px;">${it.nm}</div>
+      <div style="font-size:10px;color:var(--muted);">${it.sub}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════
+// CONTAS
+// ════════════════════════════════════════
+function renderContas(ct){
+  const all=getMes();
+  const desp=all.filter(t=>t.tipo==='despesa');
+  const tot=desp.reduce((s,t)=>s+t.valor,0);
+  const pago=desp.filter(t=>pagoSet.has(t.id)).reduce((s,t)=>s+t.valor,0);
+  ct.innerHTML=`
+    <div style="padding:14px 16px 0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div class="card-base" style="text-align:center;padding:11px 8px;">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Total</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--red);font-weight:600;">R$ ${fmtK(tot)}</div>
+        </div>
+        <div class="card-base" style="text-align:center;padding:11px 8px;">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Pago</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--green);font-weight:600;">R$ ${fmtK(pago)}</div>
+        </div>
+        <div class="card-base" style="text-align:center;padding:11px 8px;">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">A Pagar</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:${tot-pago>0?'var(--red)':'var(--green)'}">R$ ${fmtK(tot-pago)}</div>
+        </div>
+      </div>
+      <button class="btn b-sage b-sm" style="width:100%;margin-bottom:14px;" onclick="marcarTudo()">✅ Marcar todas como pagas</button>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        ${desp.slice().reverse().map(t=>txCard(t)).join('')}
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════
+// DÍVIDAS
+// ════════════════════════════════════════
+function renderDividas(ct){
+  const totDiv=dividas.reduce((s,d)=>s+(d.total-d.pago),0);
+  const totalOrig=dividas.reduce((s,d)=>s+d.total,0);
+  const priMap={alta:'pri-red',media:'pri-yellow',baixa:'pri-green'};
+  const priLbl={alta:'🔴 Urgente',media:'🟡 Normal',baixa:'🟢 Tranquila'};
+  ct.innerHTML=`
+    <div style="padding:14px 16px 0;">
+      <div class="card-base" style="background:var(--navy);border:none;margin-bottom:14px;">
+        <div style="font-size:9px;color:rgba(245,240,232,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">Total em dívidas</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#E07070;font-weight:300;margin-bottom:4px;">R$ ${fmt(totDiv)}</div>
+        <div style="font-size:10px;color:var(--sage);line-height:1.5;">Pagando R$ 500 extra/mês: quita tudo em aprox. ${Math.ceil(totDiv/500)} meses</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${dividas.filter(d=>d.pago<d.total).map(d=>{
+          const pct=Math.round(d.pago/d.total*100);
+          const falta=d.total-d.pago;
+          return`<div class="div-card">
+            <div class="div-header">
+              <div>
+                <div class="div-nm">${d.desc}</div>
+                ${d.obs?`<div style="font-size:10px;color:var(--red);margin-top:2px;">${d.obs}</div>`:''}
+              </div>
+              <div class="div-total">R$ ${fmt(falta)}</div>
+            </div>
+            <div class="div-bar"><div class="div-fill" style="width:${pct}%"></div></div>
+            <div class="div-meta">
+              <span>${pct}% quitado</span>
+              <span class="div-pri ${priMap[d.prioridade]}">${priLbl[d.prioridade]}</span>
+            </div>
+            <button class="btn b-sage b-sm" onclick="pagarDiv(${d.id})">💰 Registrar Pagamento</button>
+          </div>`;
+        }).join('')}
+        ${dividas.filter(d=>d.pago>=d.total).length?`
+          <div style="padding:10px 0;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:8px;">✅ Dívidas Quitadas</div>
+            ${dividas.filter(d=>d.pago>=d.total).map(d=>`
+              <div style="background:rgba(107,158,107,.08);border:1px solid rgba(107,158,107,.2);border-radius:10px;padding:11px 13px;margin-bottom:7px;opacity:.7;">
+                <div style="font-size:12px;font-weight:600;color:var(--navy);">✅ ${d.desc}</div>
+                <div style="font-size:10px;color:var(--sage-d);">R$ ${fmt(d.total)} — Quitado!</div>
+              </div>`).join('')}
+          </div>`:''}
+      </div>
+    </div>`;
+}
+
+function pagarDiv(id){
+  const div=dividas.find(d=>d.id===id);if(!div)return;
+  const v=prompt(`Valor pago em "${div.desc}" (R$):`,'');
+  if(!v)return;
+  const n=parseFloat(v.replace(',','.'));
+  if(isNaN(n)||n<=0){showToast('Valor inválido','err');return;}
+  div.pago=Math.min(div.total,div.pago+n);
+  saveDividas();
+  if(div.pago>=div.total){
+    showToast(`🎉 Parabéns! ${div.desc} quitada!`);
+    setTimeout(()=>{nav('dividas');},800);
+  }else{
+    showToast(`✅ Pagamento de R$ ${fmt(n)} registrado!`);
+  }
+  showSub('dividas');
+}
+
+// ════════════════════════════════════════
+// ORÇAMENTO SEMÁFORO
+// ════════════════════════════════════════
+function renderOrcamento(ct){
+  const all=getMes();
+  const desp=all.filter(t=>t.tipo==='despesa');
+  const orcKeys=Object.keys(ORC_META);
+  ct.innerHTML=`<div style="padding:14px 16px 0;">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">🟢 Dentro &nbsp; 🟡 80%+ usado &nbsp; 🔴 Estourou</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      ${orcKeys.map(k=>{
+        const[owner,cat]=k.split('-');
+        const real=desp.filter(t=>t.owner===owner&&t.cat===cat).reduce((s,t)=>s+t.valor,0);
+        const meta=ORC_META[k];
+        const pct=Math.min(120,Math.round(real/meta*100));
+        const col=pct>=100?'red':pct>=80?'yellow':'green';
+        return`<div class="orc-card">
+          <div class="orc-top">
+            <div>
+              <div class="orc-nm">${CATS[cat]?.i||''} ${CATS[cat]?.l||cat}</div>
+              <div style="font-size:9px;color:var(--muted);">${OWNERS[owner]?.l||owner}</div>
+            </div>
+            <div class="orc-badge bg-${col}"></div>
+          </div>
+          <div class="orc-bar"><div class="orc-fill fill-${col}" style="width:${Math.min(100,pct)}%"></div></div>
+          <div class="orc-vals">
+            <span>R$ ${fmtK(real)}</span>
+            <span>/ R$ ${fmtK(meta)}</span>
+          </div>
+          ${pct>=100?`<div style="font-size:9px;color:var(--red);font-weight:700;margin-top:4px;">⚠️ +R$ ${fmtK(real-meta)} estourado</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════
+// INVESTIMENTO / INDEPENDÊNCIA
+// ════════════════════════════════════════
+function renderInvestimento(ct){
+  ct.innerHTML=`<div style="padding:14px 16px 0;">
+    <div style="background:var(--navy);border-radius:12px;padding:13px 16px;margin-bottom:14px;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--cream);line-height:1.6;">"Em 10 anos você pode ser livre. Tudo depende do que faz hoje."</div>
+    </div>
+    <div class="card-base" style="margin-bottom:14px;">
+      <div class="card-title">🧮 Simulador de Independência</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;">
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Patrimônio atual</label><input type="number" id="i-pat" value="13500" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Aporte mensal</label><input type="number" id="i-ap" value="1500" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Taxa anual (%)</label><input type="number" id="i-tx" value="12" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Anos</label><input type="number" id="i-an" value="10" min="1" max="40" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Meta (R$)</label><input type="number" id="i-mt" value="2000000" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+        <div><label style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;">Renda desejada</label><input type="number" id="i-rn" value="15000" oninput="calcIF()" style="background:var(--beige);border:1.5px solid var(--border);border-radius:9px;padding:9px 11px;font-size:13px;width:100%;outline:none;"></div>
+      </div>
+      <div class="inv-result-card" id="invR"></div>
+      <div class="inv-prog"><div class="inv-fill" id="invFill" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:9px;color:var(--muted);"><span>Hoje</span><span id="invPct">0%</span><span>Meta</span></div>
+      <div class="milestones" id="milestones"></div>
+    </div>
+    <div class="card-base">
+      <div class="card-title">💡 Como acelerar</div>
+      ${['Aumente o aporte 10% ao ano','Reinvista juros automaticamente','Cada R$ 300/mês a mais = R$ 70k em 10 anos','Corte 1 assinatura e invista a diferença','Reajuste na Reset → direto para investimentos'].map(d=>`<div class="tip-row"><span class="tip-dot">✦</span>${d}</div>`).join('')}
+    </div>
+  </div>`;
+  setTimeout(calcIF,80);
+}
+function calcIF(){
+  const pat=+document.getElementById('i-pat')?.value||0;
+  const ap=+document.getElementById('i-ap')?.value||0;
+  const taxa=(+document.getElementById('i-tx')?.value||12)/100;
+  const anos=+document.getElementById('i-an')?.value||10;
+  const meta=+document.getElementById('i-mt')?.value||2000000;
+  const tm=taxa/12,n=anos*12;
+  const fut=pat*Math.pow(1+tm,n)+ap*(Math.pow(1+tm,n)-1)/tm;
+  const juros=fut-(pat+ap*n);
+  const renda=fut*tm;
+  const pct=Math.min(100,Math.round(fut/meta*100));
+  const el=document.getElementById('invR');
+  if(el)el.innerHTML=`<div class="ir-lbl">PATRIMÔNIO EM ${anos} ANOS</div><div class="ir-val">R$ ${fmtBig(fut)}</div><div class="ir-sub">💰 Juros: R$ ${fmtBig(juros)} · 📈 Renda: R$ ${fmtBig(renda)}/mês<br>${fut>=meta?'✅ Meta atingida!':'⚡ Aumente o aporte!'}</div>`;
+  const f=document.getElementById('invFill');if(f)f.style.width=pct+'%';
+  const p=document.getElementById('invPct');if(p)p.textContent=pct+'%';
+  const ms=document.getElementById('milestones');
+  if(ms){const yrs=[2,5,Math.round(anos/2),anos];ms.innerHTML=yrs.map(y=>{const nY=y*12;const fY=pat*Math.pow(1+tm,nY)+ap*(Math.pow(1+tm,nY)-1)/tm;return`<div class="ms"><div class="ms-y">${y}a</div><div class="ms-v">${fmtBig(fY)}</div></div>`;}).join('');}
+}
+
+// ════════════════════════════════════════
+// BEM-ESTAR
+// ════════════════════════════════════════
+function renderBemestar(ct){
+  const all=getMes();
+  const saude=all.filter(t=>t.cat==='saude'&&t.tipo==='despesa').reduce((s,t)=>s+t.valor,0);
+  const lazer=all.filter(t=>t.cat==='lazer'&&t.tipo==='despesa').reduce((s,t)=>s+t.valor,0);
+  ct.innerHTML=`<div style="padding:14px 16px 0;">
+    <div class="alert-banner ab-health" style="margin:0 0 14px;">
+      <div class="ab-ic">💌</div>
+      <div>
+        <div class="ab-t">Carta da Lalinha para Angelina</div>
+        <div class="ab-s" style="font-style:italic;color:var(--navy);opacity:.8;">"Você cuida de todos. E quem cuida de você? Saúde não é luxo — é estratégia. Reserve um valor sagrado mensalmente só para você. Sem culpa. Com propósito."</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div class="card-base" style="text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;margin-bottom:5px;">🏥</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Saúde</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:${saude>0?'var(--sage-d)':'var(--red)'};">R$ ${fmtK(saude)}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">${saude===0?'⚠️ Invista!':'✅ Ótimo!'}</div>
+      </div>
+      <div class="card-base" style="text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;margin-bottom:5px;">🎬</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Lazer</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--lilac-d);">R$ ${fmtK(lazer)}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Desfrutar é parte</div>
+      </div>
+      <div class="card-base" style="text-align:center;padding:12px 8px;">
+        <div style="font-size:20px;margin-bottom:5px;">💪</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;">Academia</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--sage-d);">R$ 1.160</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">✅ Ambos</div>
+      </div>
+    </div>
+    <div class="card-base" style="margin-bottom:14px;">
+      <div class="card-title">📝 Check-in da Semana</div>
+      <div class="bw-card">
+        <div class="bw-q">
+          <span class="bw-ql">Teve tempo só para você?</span>
+          <div class="bw-tog">
+            <span class="bw-opt" onclick="bwSel(this,'q1','sim')">Sim</span>
+            <span class="bw-opt" onclick="bwSel(this,'q1','nao')">Não</span>
+          </div>
+        </div>
+        <div class="bw-q">
+          <span class="bw-ql">Fez algo de prazer?</span>
+          <div class="bw-tog">
+            <span class="bw-opt" onclick="bwSel(this,'q2','sim')">Sim</span>
+            <span class="bw-opt" onclick="bwSel(this,'q2','nao')">Não</span>
+          </div>
+        </div>
+        <div class="bw-q">
+          <span class="bw-ql">Descansou de verdade?</span>
+          <div class="bw-tog">
+            <span class="bw-opt" onclick="bwSel(this,'q3','sim')">Sim</span>
+            <span class="bw-opt" onclick="bwSel(this,'q3','nao')">Não</span>
+          </div>
+        </div>
+        <div style="padding:10px 0 0;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:12px;color:var(--navy);">Nota da semana:</span>
+          <div class="stars" id="stars">
+            ${[1,2,3,4,5].map(n=>`<span class="star ${bwAnswers.stars>=n?'on':''}" onclick="bwStar(${n})">⭐</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <button class="btn b-lilac" style="margin-top:12px;" onclick="salvarBW()">💾 Salvar Check-in</button>
+    </div>
+    <div style="background:var(--navy);border-radius:12px;padding:15px;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--cream);font-weight:600;margin-bottom:9px;">🎯 Metas de Autocuidado</div>
+      ${[['💆','Spa/Massagem mensal','R$ 300/mês'],['🌍','Viagem casal semestral','R$ 3.000/sem.'],['📚','Curso pessoal','R$ 200/mês'],['🎬','Lazer prazeroso','R$ 400/mês']].map(([ic,t,v])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);">
+          <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;">${ic}</span><span style="font-size:11px;color:rgba(245,240,232,.7);">${t}</span></div>
+          <span style="font-size:10px;color:var(--sage);font-weight:500;">${v}</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+function bwSel(el,q,r){
+  const row=el.closest('.bw-tog');
+  row.querySelectorAll('.bw-opt').forEach(o=>{o.className='bw-opt';});
+  el.classList.add(r==='sim'?'on-sim':'on-nao');
+  bwAnswers[q]=r;
+}
+function bwStar(n){
+  bwAnswers.stars=n;
+  document.querySelectorAll('.star').forEach((s,i)=>{s.classList.toggle('on',i<n);});
+}
+function salvarBW(){
+  localStorage.setItem('an_bw',JSON.stringify({...bwAnswers,date:new Date().toISOString()}));
+  showToast('✅ Check-in salvo! Lalinha agradece 🌸');
+  if(bwAnswers.stars<=2){setTimeout(()=>askL('Angelina precisa de atenção especial esta semana. Manda uma mensagem carinhosa para ela.'),500);}
+}
+
+// ════════════════════════════════════════
+// NOTIFICAÇÕES
+// ════════════════════════════════════════
+function renderNotificacoes(ct){
+  const notifs=[
+    {ic:'📅',t:'Contas vencem em 5 dias',s:'Casa: R$ 7.030 · vencimento dia 23',time:'hoje, 8h',unread:true},
+    {ic:'⚠️',t:'Dívida prioritária',s:'Cleber Agiota: R$ 5.000 ainda pendente. Priorize!',time:'hoje, 8h',unread:true},
+    {ic:'🌿',t:'Marketing Soa Spa no limite',s:'Instagram + Tráfego: R$ 2.280 de R$ 2.000 orçados',time:'ontem',unread:true},
+    {ic:'🌸',t:'Angelina, cuide-se!',s:'Já faz uma semana sem check-in de bem-estar.',time:'3 dias atrás',unread:false},
+    {ic:'📈',t:'Meta de investimento',s:'Você ainda não registrou investimentos este mês. Faltam R$ 1.500 para a meta.',time:'semana passada',unread:false},
+  ];
+  ct.innerHTML=`<div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:8px;">
+    ${notifs.map(n=>`<div class="notif-card ${n.unread?'unread':''}">
+      <div class="notif-ic">${n.ic}</div>
+      <div style="flex:1;">
+        <div class="notif-t">${n.t}</div>
+        <div class="notif-s">${n.s}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+  document.getElementById('notifBadge').classList.remove('show');
+}
+
+// ════════════════════════════════════════
+// ARQUIVO
+// ════════════════════════════════════════
+function setF(el,f){
+  curFilter=f;
+  document.querySelectorAll('.fc').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderArch();
+}
+function renderArch(){
+  const q=(document.getElementById('archQ')?.value||'').toLowerCase();
+  let list=docs.slice().reverse();
+  if(curFilter!=='*'){
+    if(['pix','nota','boleto','manual'].includes(curFilter))list=list.filter(d=>d.docType===curFilter);
+    else list=list.filter(d=>d.owner===curFilter);
+  }
+  if(q)list=list.filter(d=>d.desc.toLowerCase().includes(q)||(CATS[d.cat]?.l||'').toLowerCase().includes(q));
+  const el=document.getElementById('archList');
+  if(!el)return;
+  const icMap={pix:'📲',nota:'🧾',boleto:'📋',manual:'✍️'};
+  const clsMap={pix:'di-pix',nota:'di-nota',boleto:'di-boleto',manual:'di-manual'};
+  if(!list.length){el.innerHTML=`<div class="empty-state"><div class="empty-ic">☁️</div><div class="empty-t">Nenhum documento</div><div style="font-size:11px;">Capture fotos de notas e comprovantes</div></div>`;return;}
+  el.innerHTML=list.map(d=>`<div class="doc-card">
+    <div class="doc-ic-wrap ${clsMap[d.docType]||'di-manual'}">${icMap[d.docType]||'📄'}</div>
+    <div class="doc-info">
+      <div class="doc-desc">${d.desc}</div>
+      <div class="doc-meta">${OWNERS[d.owner]?.l||d.owner} · ${CATS[d.cat]?.l||d.cat} · ${fmtD(d.data)}</div>
+    </div>
+    <div class="doc-val">R$ ${fmt(d.valor)}</div>
+  </div>`).join('');
+}
+
+// ════════════════════════════════════════
+// LALINHA
+// ════════════════════════════════════════
+async function sendL(){
+  const inp=document.getElementById('lalInp');
+  if(!inp||!inp.value.trim())return;
+  await askL(inp.value.trim());inp.value='';
+}
+async function askL(msg){
+  addMsg(msg,'user');
+  const all=getMes();
+  const desp=all.filter(t=>t.tipo==='despesa');
+  const owD={};['soa','reset','casa','pessoal'].forEach(o=>{owD[o]=desp.filter(t=>t.owner===o).reduce((s,t)=>s+t.valor,0);});
+  const pago=desp.filter(t=>pagoSet.has(t.id)).reduce((s,t)=>s+t.valor,0);
+  const divTot=dividas.filter(d=>d.pago<d.total).reduce((s,d)=>s+(d.total-d.pago),0);
+  const ctx=`Usuário: ${curUser==='angelina'?'Angelina (Soa Spa)':'Nivaldo (Reset Mentoria)'}.
+Total despesas: R$ ${fmt(desp.reduce((s,t)=>s+t.valor,0))} | Pago: R$ ${fmt(pago)} | A pagar: R$ ${fmt(desp.reduce((s,t)=>s+t.valor,0)-pago)}
+Soa Spa: R$ ${fmt(owD.soa)} | Reset: R$ ${fmt(owD.reset)} | Casa: R$ ${fmt(owD.casa)} | Pessoal: R$ ${fmt(owD.pessoal)}
+Total dívidas: R$ ${fmt(divTot)} | Prioridade: Cleber Agiota R$ ${fmt(dividas.find(d=>d.id===1)?.total-dividas.find(d=>d.id===1)?.pago||5000)}
+Docs arquivados: ${docs.length}
+Bem-estar Angelina: ${bwData.stars?bwData.stars+' estrelas na última semana':'sem check-in recente'}
+Pilares: Família · Diálogo · Reciprocidade · Prioridade · Propósito`;
+  const msgs=document.getElementById('lalMsgs');
+  const tid='t'+Date.now();
+  if(msgs){const el=document.createElement('div');el.className='lmsg lm-ai';el.id=tid;el.innerHTML='<div class="ai-spin" style="width:16px;height:16px;border-width:2px;margin:2px;"></div>';msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;}
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:700,
+        system:`Você é Lalinha, assistente financeira carinhosa e motivacional de Angelina e Nivaldo. ${ctx}\nSeja direta, calorosa e concisa (respostas mobile-friendly). Se Angelina: incentive autocuidado. Priorize quitação do Cleber Agiota. Incentive investimentos. Português brasileiro.`,
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    const d=await res.json();
+    const reply=d.content?.[0]?.text||'Não consegui processar. Tente novamente.';
+    const el=document.getElementById(tid);if(el){el.innerHTML=reply+'<div class="lm-time">agora</div>';}
+  }catch(e){const el=document.getElementById(tid);if(el)el.textContent='Erro de conexão.';}
+  if(msgs)msgs.scrollTop=msgs.scrollHeight;
+}
+function addMsg(txt,role){
+  const msgs=document.getElementById('lalMsgs');if(!msgs)return;
+  const el=document.createElement('div');
+  el.className=`lmsg ${role==='user'?'lm-user':'lm-ai'}`;
+  el.innerHTML=txt+'<div class="lm-time">agora</div>';
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ════════════════════════════════════════
+// FOTO / IA
+// ════════════════════════════════════════
+function triggerPhoto(){document.getElementById('photoInput').click();}
+async function processPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  document.getElementById('photoInput').value='';
+  openSheet('manual');
+  document.getElementById('aiProc').classList.add('on');
+  document.getElementById('manualForm').style.display='none';
+  document.getElementById('resultCard').classList.remove('on');
+  const reader=new FileReader();
+  reader.onload=async(ev)=>{
+    const b64=ev.target.result.split(',')[1];
+    const steps=['Lalinha lendo o documento...','Identificando estabelecimento...','Extraindo valores...','Classificando categoria...','Detectando conta...'];
+    let si=0;
+    const iv=setInterval(()=>{const el=document.getElementById('aiStep');if(el)el.textContent=steps[si%steps.length];si++;},700);
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',max_tokens:600,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:file.type,data:b64}},
+            {type:'text',text:`Analise este documento financeiro (nota fiscal, boleto, comprovante pix). Retorne APENAS JSON válido sem markdown:
+{"desc":"nome do estabelecimento ou pagamento","valor":0.00,"data":"YYYY-MM-DD","venc":"YYYY-MM-DD","cat":"aluguel|energia|mercado|carro|alimentacao|assinatura|marketing|contador|saude|lazer|combustivel|investimento|outros","owner":"casa|pessoal|soa|reset","tipo":"despesa|receita","docType":"pix|nota|boleto|manual"}
+Regras para owner: spa/beleza/estetíca→soa, mentoria/digital/coaching→reset, água/energia/aluguel/internet→casa, pessoal/academia/celular→pessoal.
+Se ilegível: {"desc":"Documento","valor":0,"data":"${new Date().toISOString().split('T')[0]}","venc":"${new Date().toISOString().split('T')[0]}","cat":"outros","owner":"casa","tipo":"despesa","docType":"manual"}`}
+          ]}]
+        })
+      });
+      clearInterval(iv);
+      const d=await res.json();
+      let p;try{p=JSON.parse(d.content?.[0]?.text||'{}');}catch{p={desc:'Documento',valor:0,data:new Date().toISOString().split('T')[0],venc:new Date().toISOString().split('T')[0],cat:'outros',owner:'casa',tipo:'despesa',docType:'manual'};}
+      document.getElementById('m-desc').value=p.desc||'';
+      document.getElementById('m-val').value=p.valor||'';
+      document.getElementById('m-data').value=p.data||new Date().toISOString().split('T')[0];
+      document.getElementById('m-doctype').value=p.docType||'manual';
+      selOwnerProg(p.owner||'casa');
+      selTipoProg(p.tipo||'despesa');
+      selCatProg(p.cat||'outros');
+      document.getElementById('rc-desc').textContent=p.desc||'—';
+      document.getElementById('rc-val').textContent=p.valor?'R$ '+fmt(p.valor):'—';
+      document.getElementById('rc-cat').textContent=(CATS[p.cat]?.i||'')+' '+(CATS[p.cat]?.l||'—');
+      document.getElementById('rc-own').textContent=(OWNERS[p.owner]?.ic||'')+' '+(OWNERS[p.owner]?.l||'—');
+      document.getElementById('resultCard').classList.add('on');
+      document.getElementById('aiProc').classList.remove('on');
+      document.getElementById('manualForm').style.display='block';
+      showToast('✅ Lalinha leu o documento!');
+    }catch(err){
+      clearInterval(iv);
+      document.getElementById('aiProc').classList.remove('on');
+      document.getElementById('manualForm').style.display='block';
+      showToast('Preencha manualmente','err');
+    }
+  };reader.readAsDataURL(file);
+}
+
+// ════════════════════════════════════════
+// VOZ
+// ════════════════════════════════════════
+function toggleVoz(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){showToast('Voz não suportada neste browser','err');return;}
+  if(vozIsRec){
+    vozRec.stop();vozIsRec=false;
+    document.getElementById('micBtn').classList.remove('rec');
+    document.getElementById('micBtn').textContent='🎙️';
+    document.getElementById('vozSt').textContent='Processando...';
+    if(vozText){document.getElementById('vozTx').textContent=vozText;document.getElementById('vozTx').classList.add('on');document.getElementById('vozProc').style.display='flex';}
+  }else{
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    vozRec=new SR();vozRec.lang='pt-BR';vozRec.continuous=true;vozRec.interimResults=true;
+    vozRec.onresult=(ev)=>{let t='';for(let i=ev.resultIndex;i<ev.results.length;i++)t+=ev.results[i][0].transcript;vozText=t;document.getElementById('vozTx').textContent=t;document.getElementById('vozTx').classList.add('on');};
+    vozRec.onerror=()=>{vozIsRec=false;document.getElementById('micBtn').classList.remove('rec');document.getElementById('micBtn').textContent='🎙️';document.getElementById('vozSt').textContent='Erro — tente novamente';};
+    vozRec.start();vozIsRec=true;vozText='';
+    document.getElementById('micBtn').classList.add('rec');document.getElementById('micBtn').textContent='⏹️';
+    document.getElementById('vozSt').textContent='Gravando... toque para parar';
+    document.getElementById('vozTx').classList.remove('on');document.getElementById('vozProc').style.display='none';
+  }
+}
+async function processarVoz(){
+  if(!vozText){showToast('Nada gravado','err');return;}
+  closeSheets();openSheet('manual');
+  document.getElementById('aiProc').classList.add('on');document.getElementById('manualForm').style.display='none';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:`Extraia dados financeiros desta frase: "${vozText}". Retorne APENAS JSON: {"desc":"descrição","valor":0.00,"data":"${new Date().toISOString().split('T')[0]}","cat":"aluguel|energia|mercado|carro|alimentacao|assinatura|marketing|contador|saude|lazer|combustivel|investimento|outros","owner":"casa|pessoal|soa|reset","tipo":"despesa|receita","docType":"manual"}. Inferir conta: spa/angelina→soa, reset/mentoria/nivaldo→reset, casa/energia/aluguel→casa, academia/celular/pessoal→pessoal.`}]})
+    });
+    const d=await res.json();
+    let p;try{p=JSON.parse(d.content?.[0]?.text||'{}');}catch{p={desc:vozText,valor:0,data:new Date().toISOString().split('T')[0],cat:'outros',owner:'pessoal',tipo:'despesa',docType:'manual'};}
+    document.getElementById('m-desc').value=p.desc||vozText;
+    document.getElementById('m-val').value=p.valor||'';
+    document.getElementById('m-data').value=p.data||new Date().toISOString().split('T')[0];
+    selOwnerProg(p.owner||'pessoal');selTipoProg(p.tipo||'despesa');selCatProg(p.cat||'outros');
+    document.getElementById('rc-desc').textContent=p.desc||vozText;
+    document.getElementById('rc-val').textContent=p.valor?'R$ '+fmt(p.valor):'—';
+    document.getElementById('rc-cat').textContent=(CATS[p.cat]?.i||'')+' '+(CATS[p.cat]?.l||'—');
+    document.getElementById('rc-own').textContent=(OWNERS[p.owner]?.ic||'')+' '+(OWNERS[p.owner]?.l||'—');
+    document.getElementById('resultCard').classList.add('on');
+    document.getElementById('aiProc').classList.remove('on');document.getElementById('manualForm').style.display='block';
+    showToast('✅ Lalinha entendeu!');
+  }catch(e){document.getElementById('aiProc').classList.remove('on');document.getElementById('manualForm').style.display='block';}
+}
+
+// ════════════════════════════════════════
+// SAVE
+// ════════════════════════════════════════
+function salvar(){
+  const desc=document.getElementById('m-desc').value.trim();
+  const valor=parseFloat(document.getElementById('m-val').value);
+  const data=document.getElementById('m-data').value;
+  if(!desc||!valor||!data){showToast('Preencha descrição, valor e data!','err');return;}
+  const entry={
+    id:Date.now(),desc,valor,data,venc:data,
+    owner:selOwnerVal,cat:selCatVal,tipo:selTipoVal,
+    docType:document.getElementById('m-doctype').value,
+    obs:document.getElementById('m-obs')?.value||'',
+    arquivado:new Date().toISOString()
+  };
+  txs.push(entry);docs.push({...entry});
+  saveTxs();saveDocs();closeSheets();
+  showToast('✅ Salvo e arquivado!');
+  renderHome();renderArch();
+}
+
+// ════════════════════════════════════════
+// SELECTORS
+// ════════════════════════════════════════
+function selOwner(el){selOwnerVal=el.dataset.o;document.querySelectorAll('.ow-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+function selOwnerProg(o){selOwnerVal=o;document.querySelectorAll('.ow-btn').forEach(b=>{b.classList.toggle('on',b.dataset.o===o);});}
+function selTipo(v,el){selTipoVal=v;document.querySelectorAll('.tt-o').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+function selTipoProg(v){selTipoVal=v;document.querySelectorAll('.tt-o').forEach(b=>{b.classList.toggle('on',(v==='receita'&&b.textContent.includes('Receita'))||(v==='despesa'&&b.textContent.includes('Despesa')));});}
+function selCat(el){selCatVal=el.dataset.c;document.querySelectorAll('.cat-opt').forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+function selCatProg(c){selCatVal=c;document.querySelectorAll('.cat-opt').forEach(b=>{b.classList.toggle('on',b.dataset.c===c);});}
+
+// ════════════════════════════════════════
+// SHEETS
+// ════════════════════════════════════════
+function openSheet(id){
+  document.getElementById('bd').classList.add('on');
+  const s=document.getElementById('bs-'+id);if(!s)return;
+  s.classList.add('on');
+  if(id==='manual'){
+    document.getElementById('aiProc').classList.remove('on');
+    document.getElementById('resultCard').classList.remove('on');
+    document.getElementById('manualForm').style.display='block';
+    document.getElementById('m-data').value=new Date().toISOString().split('T')[0];
+    document.getElementById('m-desc').value='';
+    document.getElementById('m-val').value='';
+    if(document.getElementById('m-obs'))document.getElementById('m-obs').value='';
+  }
+  if(id==='voice'){
+    vozText='';vozIsRec=false;
+    document.getElementById('micBtn').className='mic-big';
+    document.getElementById('micBtn').textContent='🎙️';
+    document.getElementById('vozSt').textContent='Toque para gravar';
+    document.getElementById('vozTx').classList.remove('on');
+    document.getElementById('vozProc').style.display='none';
+  }
+}
+function closeSheets(){
+  document.getElementById('bd').classList.remove('on');
+  document.querySelectorAll('.bsheet').forEach(s=>s.classList.remove('on'));
+  if(vozIsRec&&vozRec){vozRec.stop();vozIsRec=false;}
+}
+
+// ════════════════════════════════════════
+// PDF
+// ════════════════════════════════════════
+function gerarPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const all=getMes();
+  const desp=all.filter(t=>t.tipo==='despesa');
+  const tot=desp.reduce((s,t)=>s+t.valor,0);
+  const pago=desp.filter(t=>pagoSet.has(t.id)).reduce((s,t)=>s+t.valor,0);
+  const now=new Date();
+  let y=16;
+  doc.setFillColor(27,43,75);doc.rect(0,0,210,28,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(245,240,232);
+  doc.text('Angelina & Nivaldo — A&N Smart Finance',13,11);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(168,197,160);
+  doc.text('Família · Diálogo · Reciprocidade · Prioridade · Propósito',13,18);
+  doc.setTextColor(245,240,232);doc.text(`${MONTHS[now.getMonth()]} ${now.getFullYear()}`,13,24);
+  doc.text(now.toLocaleDateString('pt-BR'),197,24,{align:'right'});
+  y=36;
+  doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(40,40,40);
+  doc.text('RESUMO',13,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.setTextColor(200,60,60);doc.text(`Total Despesas: R$ ${fmt(tot)}`,13,y);y+=5;
+  doc.setTextColor(60,140,80);doc.text(`Já Pago: R$ ${fmt(pago)}`,13,y);y+=5;
+  doc.setTextColor(40,40,40);doc.text(`A Pagar: R$ ${fmt(tot-pago)}`,13,y);y+=8;
+  doc.setDrawColor(200,200,200);doc.line(13,y,197,y);y+=6;
+  doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text('LANÇAMENTOS',13,y);y+=6;
+  desp.forEach(t=>{
+    if(y>272){doc.addPage();y=16;}
+    doc.setFont('helvetica','normal');doc.setFontSize(8);
+    doc.setTextColor(130,130,130);doc.text(fmtD(t.data),13,y);
+    doc.setTextColor(40,40,40);
+    const d=t.desc.length>44?t.desc.slice(0,44)+'…':t.desc;
+    doc.text(d,38,y);
+    doc.setTextColor(pagoSet.has(t.id)?60:200,pagoSet.has(t.id)?140:60,pagoSet.has(t.id)?80:60);
+    doc.text(`${pagoSet.has(t.id)?'✓':'-'} R$ ${fmt(t.valor)}`,197,y,{align:'right'});
+    y+=4.8;
+  });
+  doc.setFont('helvetica','italic');doc.setFontSize(7);doc.setTextColor(160,160,160);
+  doc.text('A&N Smart Finance · Gerado pela Lalinha ✨',13,285);
+  doc.save(`AN-${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}.pdf`);
+  showToast('📄 PDF gerado!');
+}
+function copiarLink(){
+  navigator.clipboard?.writeText(window.location.href).then(()=>showToast('🔗 Link copiado! Compartilhe com potenciais alunos 🎯')).catch(()=>showToast('Link: '+window.location.href));
+}
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function fmt(v){return(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtK(v){if(v>=1000)return(v/1000).toFixed(1).replace('.',',')+'k';return fmt(v);}
+function fmtBig(v){if(v>=1e6)return(v/1e6).toFixed(2).replace('.',',')+'mi';if(v>=1e3)return(v/1e3).toFixed(1).replace('.',',')+'mil';return fmt(v);}
+function fmtD(d){if(!d)return'—';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y.slice(2)}`;}
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type==='err'?'err':''} on`;
+  setTimeout(()=>t.classList.remove('on'),3200);
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+window.onload=()=>{
+  document.getElementById('bnav').style.display='none';
+  if(curUser){
+    const init=curUser==='angelina'?'A':'N';
+    ['av1','av2','av3','av4'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+    document.getElementById('bnav').style.display='flex';
+    nav('home');
+  }
+};
+</script>
+</body>
+</html>
